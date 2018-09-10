@@ -1,0 +1,38 @@
+service: realtime-chat
+
+plugins:
+  - serverless-appsync-plugin
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  region: eu-west-1
+  stage: ${opt:stage, self:custom.defaultStage}
+
+resources:
+  Description: 'Realtime Chat App with GraphQL'
+
+custom:
+  defaultStage: dev
+  env: ${file(./env/${self:provider.stage}.yml)}
+  accountId: ${self:custom.env.awsAccountId}
+  appSync:
+    name: realtimeChat
+    authenticationType: API_KEY
+    schema: schema.graphql
+    serviceRole: AppSyncServiceRole
+    mappingTemplates:
+      - dataSource: Chat
+        type: Mutation
+        field: message
+        request: message-request-mapping.txt
+        response: forwardResult-response-mapping.txt
+      - dataSource: Chat
+        type: Subscription
+        field: inbox
+        request: message-request-mapping.txt
+        response: forwardResult-response-mapping.txt
+    dataSources:
+      - type: NONE # use an AppSync local resolver
+        name: Chat
+        description: 'Chat relay'

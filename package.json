@@ -1,0 +1,14 @@
+{
+  "name": "realtime-chat",
+  "version": "1.0.0",
+  "description": "real time chat with graphql",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "serverless": "^1.30.3"
+  },
+  "dependencies": {
+    "serverless-appsync-plugin": "^1.0.5"
+  }
+}
